@@ -6,10 +6,15 @@ import AdminLayout from "layouts/admin";
 import AuthLayout from "layouts/auth";
 import { ToastContainer } from "react-toastify";
 import ProtectedRoutes from "./components/ProtectedRoutes";
+import ProtectedRoute from "./components/ProtectedRoute";
+import UserManagement from "./pages/UserManagement";
+import { AuthProvider } from "./context/AuthContext";
 const App = () => {
   return (
     <>
-      <Routes>
+
+    <AuthProvider>
+    <Routes>
         <Route path="auth/*" element={<AuthLayout />} />
         <Route
           path="admin/*"
@@ -27,8 +32,18 @@ const App = () => {
             </ProtectedRoutes>
           }
         />
+        <Route
+                        path="/users"
+                        element={
+                            <ProtectedRoute allowedRoles={["admin"]}>
+                                <UserManagement />
+                            </ProtectedRoute>
+                        }
+                    />
         <Route path="/" element={<Navigate to="/admin" replace />} />
       </Routes>
+    </AuthProvider>
+      
       <ToastContainer
         className={
           "text-16 w-[320px] p-0 !font-poppins font-semibold lg:w-[500px]"
